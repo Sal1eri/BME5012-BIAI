@@ -15,12 +15,12 @@ follow the setup below to initial env
 ```
 
 
-| Method | Params | Accuracy | Macro-F1 | Macro-AUC | Balanced Acc. | Cohen's $\kappa$ | MCC (Multi-class) |
+| Method | Params | Accuracy (%) | Macro-F1 (%) | Macro-AUC (%) | Balanced Acc. (%) | Cohen's $\kappa$ (%) | MCC (Multi-class) (%) |
 | :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
-| **VGG16 (2D-TL)** | 134.3 M | 0.4146 | 0.4245 | 0.8082 | 0.4467 | 0.2483 | 0.2918 |
-| **3D-ResNet** | 33.4M | 0.6097 | 0.6620 | 0.8351 | 0.6666 | 0.5034 | 0.5064 |
-| **DA-ViT** |-- |0.7317 |0.7783 |0.9155 |0.7800 |0.6583 |0.6619 |
-| **Swin-CNN ：(Ours)** |-- | | | | | | |
+| **VGG16 (2D-TL)** | 134.3 M | 41.46 | 42.45 | 80.82 | 44.67 | 24.83 | 29.18 |
+| **3D-ResNet** | 33.4 M | 60.97 | 66.20 | 83.51 | 66.66 | 50.34 | 50.64 |
+| **DA-ViT** |-- | 73.17 | 77.83 | 91.55 | 78.00 | 65.83 | 66.19 |
+| **Swin-CNN ：(Ours)** |-- | 68.29 | 71.42 | 72.67 | 59.80 | 60.35 | 89.16 |
 
 
 ## Supported Models

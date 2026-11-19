@@ -80,33 +80,24 @@ VGG16 input stacks the three slices below.
 
 ## Usage
 
-Commands (run from repo root):
+Train and evaluate from the repository root:
 
 ```bash
 python train.py --model resnet
-python train.py --model vgg16 --epochs 50 --lr 1e-4
 python test.py --model resnet --split test
-python scripts/ml_baselines.py --source image --model random_forest --pca-components 256
-bash scripts/run_ml_baselines.sh
-python scripts/gradcam.py --split test --index 0
-python scripts/generate_splits.py
-python scripts/metadata_ml_baseline.py --help
-python scripts/plot_age_distribution.py
-python scripts/plot_age_distribution_blue.py
-python scripts/preview_views.py
 ```
-
-Run `python train.py --help` or `python test.py --help` for all options.
 
 Full experiment pipeline:
 
 ```bash
 python scripts/build_cache.py
 PYTHON=$PY bash scripts/run_ml_baselines.sh
-bash scripts/run_all_experiments.sh   # 6 models x 5 seeds
+bash scripts/run_all_experiments.sh
 python scripts/collect_results.py
 python scripts/plot_losses.py
 ```
+
+See `--help` for options; helper scripts are under `scripts/`.
 
 ## Results
 

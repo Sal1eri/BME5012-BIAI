@@ -4,18 +4,18 @@ model:
   in_channels: 1
 
 training:
-  batch_size: 32
-  epochs: 200
+  batch_size: 8
+  epochs: 50
   save_path: 'checkpoints/resnet/resnet_best.pth'
   optimizer:
     name: 'adam'
     weight_decay: 1e-4
-    lr: 1e-3
+    lr: 1e-4
   early_stopping:
     monitor: 'val_loss'  
-    patience: 10         
+    patience: 10
   loss:
-    name: 'WeightedCategoricalCrossEntropy' 
+    name: 'CrossEntropyLoss' 
 
 data:
   train_csv: 'configs/split_results/train_split_70.csv'

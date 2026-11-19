@@ -1,0 +1,56 @@
+[TEST] metrics:
+  - Accuracy: 0.2500
+  - Macro-F1: 0.0800
+  - Macro-AUC: 0.5000
+  - Balanced Accuracy: 0.2000
+  - Cohen's Kappa: 0.0000
+  - MCC: 0.0000
+              precision    recall  f1-score   support
+
+          CN     0.0000    0.0000    0.0000        12
+         MCI     0.2500    1.0000    0.4000         8
+        EMCI     0.0000    0.0000    0.0000         1
+        LMCI     0.0000    0.0000    0.0000         1
+          AD     0.0000    0.0000    0.0000        10
+
+    accuracy                         0.2500        32
+   macro avg     0.0500    0.2000    0.0800        32
+weighted avg     0.0625    0.2500    0.1000        32
+
+[TRAIN] metrics:
+  - Accuracy: 1.0000
+  - Macro-F1: 1.0000
+  - Macro-AUC: 0.0009
+  - Balanced Accuracy: 1.0000
+  - Cohen's Kappa: 1.0000
+  - MCC: 1.0000
+              precision    recall  f1-score   support
+
+          CN     1.0000    1.0000    1.0000        36
+         MCI     1.0000    1.0000    1.0000        38
+        EMCI     1.0000    1.0000    1.0000        21
+        LMCI     1.0000    1.0000    1.0000        27
+          AD     1.0000    1.0000    1.0000        37
+
+    accuracy                         1.0000       159
+   macro avg     1.0000    1.0000    1.0000       159
+weighted avg     1.0000    1.0000    1.0000       159
+
+[VAL] metrics:
+  - Accuracy: 0.2857
+  - Macro-F1: 0.0889
+  - Macro-AUC: 0.5000
+  - Balanced Accuracy: 0.2000
+  - Cohen's Kappa: 0.0000
+  - MCC: 0.0000
+              precision    recall  f1-score   support
+
+          CN     0.0000    0.0000    0.0000         4
+         MCI     0.2857    1.0000    0.4444         4
+        EMCI     0.0000    0.0000    0.0000         2
+        LMCI     0.0000    0.0000    0.0000         1
+          AD     0.0000    0.0000    0.0000         3
+
+    accuracy                         0.2857        14
+   macro avg     0.0571    0.2000    0.0889        14
+weighted avg     0.0816    0.2857    0.1270        14

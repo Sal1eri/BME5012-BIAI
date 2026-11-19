@@ -1,5 +1,10 @@
 import os
 import argparse
+import sys
+from pathlib import Path
+
+sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
+
 import torch
 import torch.nn.functional as F
 import matplotlib.pyplot as plt
@@ -8,7 +13,7 @@ import nibabel as nib
 from matplotlib import cm
 
 from utils.dataset import ADNIDataset, load_config
-from model.ResNet import ResNet3D
+from models.resnet import ResNet3D
 
 
 class GradCAM3D:

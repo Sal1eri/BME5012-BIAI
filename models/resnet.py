@@ -45,6 +45,7 @@ class ResNet3D(nn.Module):
         self.layer4 = self._make_layer(block, 512, layers[3], stride=2)
 
         self.avgpool = nn.AdaptiveAvgPool3d((1,1,1))
+        self.dropout = nn.Dropout(0.3)
         self.fc = nn.Linear(512 * block.expansion, num_classes)
 
     def _make_layer(self, block, planes, blocks, stride=1):
@@ -65,20 +66,20 @@ class ResNet3D(nn.Module):
         x = self.layer4(x)
         x = self.avgpool(x)
         x = torch.flatten(x, 1)
-        x = self.fc(x)
+        x = self.fc(self.dropout(x))
         return x
     def save_model(self, path):
-        """保存模型权重"""
+        """Save model weights."""
         torch.save(self.state_dict(), path)
 
     def load_model(self, path, map_location=None):
-        """加载模型权重"""
+        """Load model weights."""
         state_dict = torch.load(path, map_location=map_location)
         self.load_state_dict(state_dict)
-        self.eval()  # 切换到 eval 模式
+        self.eval()  # Inference mode
 
 # -----------------------
-# 示例
+# Example
 # -----------------------
 if __name__ == "__main__":
     model = ResNet3D(num_classes=5, input_channels=1)

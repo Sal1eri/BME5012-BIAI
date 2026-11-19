@@ -1,0 +1,10 @@
+family,method,seed,Accuracy,Macro-F1,Macro-AUC,Balanced Accuracy,Cohen's Kappa,MCC
+traditional_ml,image_pca256_logreg,0,0.1562,0.0769,0.5471,0.125,-0.0237,-0.0312
+traditional_ml,image_pca256_random_forest,0,0.2188,0.0952,0.6794,0.1667,-0.0638,-0.107
+traditional_ml,image_pca256_svm,0,0.25,0.08,0.5,0.2,0.0,0.0
+traditional_ml,image_single_slice_pca256_logreg,0,0.1562,0.0952,0.5323,0.125,0.0411,0.0601
+traditional_ml,image_single_slice_pca256_random_forest,0,0.2188,0.3253,0.6065,0.3233,-0.1127,-0.12
+traditional_ml,image_single_slice_pca256_svm,0,0.25,0.08,0.5,0.2,0.0,0.0
+traditional_ml,metadata_logreg,0,0.1875,0.1235,0.3075,0.125,0.0083,0.0101
+traditional_ml,metadata_random_forest,0,0.1875,0.14,0.4238,0.1333,0.0083,0.0094
+traditional_ml,metadata_svm,0,0.0938,0.0838,0.3569,0.0667,-0.0415,-0.051

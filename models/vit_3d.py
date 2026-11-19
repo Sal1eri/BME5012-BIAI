@@ -2,11 +2,10 @@ import torch
 import torch.nn as nn
 import numpy as np
 
-# 来自: qasymjomart/vit_recipe_for_ad/models/vit3d.py
-# 工具函数内联，以便独立运行
+# Adapted from qasymjomart/vit_recipe_for_ad (vit3d.py).
 
 def trunc_normal_(tensor, mean=0., std=1., a=-2., b=2.):
-    # 简化的截断正态分布初始化
+    # Simplified truncated normal init
     with torch.no_grad():
         return tensor.normal_(mean, std).clamp(a*std, b*std)
 
@@ -30,7 +29,7 @@ class DropPath(nn.Module):
 class PatchEmbed3D(nn.Module):
     def __init__(self, img_size, patch_size, in_chans=1, embed_dim=768):
         super().__init__()
-        # 假设 img_size 是元组 (D, H, W) 或 单个 int
+        # Accept int or (D, H, W)
         if isinstance(img_size, int):
             img_size = (img_size, img_size, img_size)
         if isinstance(patch_size, int):
@@ -45,7 +44,7 @@ class PatchEmbed3D(nn.Module):
             kernel_size=patch_size,
             stride=patch_size
         )
-        # 计算 patch 数量
+        # Number of patches
         self.n_patches = (img_size[0] // patch_size[0]) * \
                          (img_size[1] // patch_size[1]) * \
                          (img_size[2] // patch_size[2])
@@ -116,7 +115,7 @@ class Block(nn.Module):
 
 class VisionTransformer3D(nn.Module):
     def __init__(self, 
-                img_size=128,  # 请根据实际输入调整
+                img_size=128,  # Adjust to input size
                 patch_size=16, 
                 in_chans=1, 
                 num_classes=5, 
@@ -149,7 +148,7 @@ class VisionTransformer3D(nn.Module):
         self.norm = nn.LayerNorm(embed_dim, eps=1e-6)
         self.head = nn.Linear(embed_dim, num_classes)
 
-        # 初始化权重
+        # Init weights
         trunc_normal_(self.cls_token, std=.02)
         trunc_normal_(self.pos_embed, std=.02)
         self.apply(self._init_weights)
@@ -171,7 +170,7 @@ class VisionTransformer3D(nn.Module):
         cls_token = self.cls_token.expand(n_samples, -1, -1)
         x = torch.cat((cls_token, x), dim=1)
         
-        # 简单处理位置编码对齐，如果输入尺寸变化
+        # Align positional embedding with input size
         if x.shape[1] != self.pos_embed.shape[1]:
              x = x + self.pos_embed[:, :x.shape[1], :]
         else:

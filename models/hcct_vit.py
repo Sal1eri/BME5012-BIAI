@@ -3,8 +3,7 @@ import torch.nn as nn
 from einops import rearrange
 import math
 
-# 来自: arindammajee/alzheimer-detection-with-3d-hcct/ViT/HCCT.py
-# 已做适当调整以适配独立调用
+# Adapted from arindammajee/alzheimer-detection-with-3d-hcct (HCCT.py).
 
 class ConvBlock(nn.Module):
     def __init__(self, in_channels, out_channels, kernel_size, stride, padding):
@@ -25,13 +24,13 @@ class PatchEmbeddings(nn.Module):
     def __init__(self, config):
         super().__init__()
         self.num_channels = config.get("num_channels", 1)
-        # 这里的 patch embedding 使用了 Conv 堆叠的方式，而不是直接切片
+        # Patch embedding via stacked 3D convolutions.
         self.conv_1 = ConvBlock(self.num_channels, 32, kernel_size=3, stride=1, padding=1)
         self.conv_2 = ConvBlock(32, 64, kernel_size=3, stride=1, padding=1)
         self.conv_3 = ConvBlock(64, 128, kernel_size=3, stride=1, padding=1)
         self.conv_4 = ConvBlock(128, 256, kernel_size=3, stride=1, padding=1)
         self.conv_5 = ConvBlock(256, 512, kernel_size=3, stride=1, padding=1)
-        self.num_patches = 512 # 根据卷积层输出写死
+        self.num_patches = 512  # Max tokens; forward truncates the positional embedding
 
     def forward(self, x):
         x = self.conv_1(x)
@@ -39,7 +38,7 @@ class PatchEmbeddings(nn.Module):
         x = self.conv_3(x)
         x = self.conv_4(x)
         x = self.conv_5(x)
-        x = rearrange(x, 'b c d w h -> b c (d w h)')
+        x = rearrange(x, 'b c d h w -> b (d h w) c')
         return x
 
 class Embeddings(nn.Module):
@@ -57,9 +56,8 @@ class Embeddings(nn.Module):
         batch_size, _, _ = x.size()
         cls_tokens = self.cls_token.expand(batch_size, -1, -1)
         x = torch.cat((cls_tokens, x), dim=1)
-        # 简单的位置编码加法，注意这里假设了 num_patches 是固定的
+        # Fixed-length positional embedding; truncate on mismatch.
         if x.size(1) != self.position_embeddings.size(1):
-             # 简单的容错处理，如果尺寸不匹配则截断或插值，这里直接切片演示
              x = x + self.position_embeddings[:, :x.size(1), :]
         else:
             x = x + self.position_embeddings
@@ -156,12 +154,12 @@ class Encoder(nn.Module):
 class HCCT_ViT(nn.Module):
     def __init__(self, num_classes=5, input_channels=1):
         super().__init__()
-        # 默认配置，根据 arindammajee 仓库代码推断
+        # Default config
         self.config = {
             "num_channels": input_channels,
-            "image_size": 128, # 注意：这里的ViT实现依赖卷积层，对输入尺寸不完全敏感，但位置编码有固定长度
-            "patch_size": 16, # 未在PatchEmbeddings中直接使用，但保留配置
-            "hidden_size": 512, # 由Conv_5输出通道决定
+            "image_size": 128,
+            "patch_size": 16,
+            "hidden_size": 512,  # conv_5 output channels
             "num_hidden_layers": 8,
             "num_attention_heads": 8,
             "intermediate_size": 2048,

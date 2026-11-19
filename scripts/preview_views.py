@@ -1,15 +1,22 @@
 import os
+import sys
+from pathlib import Path
+
+_REPO_ROOT = Path(__file__).resolve().parents[1]
+if str(_REPO_ROOT) not in sys.path:
+    sys.path.insert(0, str(_REPO_ROOT))
+
 import torch
 from torch.utils.data import DataLoader
 import torchvision.utils as vutils
 from utils.dataset import ADNIDataset, load_config
-from model.vgg16 import VGG16ForAD
-from model.ResNet import ResNet3D
+from models.vgg16 import VGG16ForAD
+from models.resnet import ResNet3D
 import numpy as np
 
 
 # ==========================
-# 按配置构建模型
+# Build model from config
 # ==========================
 def build_model(name):
     name = name.lower()
@@ -18,12 +25,12 @@ def build_model(name):
     elif name in ["resnet", "resnet3d"]:
         return ResNet3D()
     else:
-        raise ValueError("未知模型: " + name)
+        raise ValueError("Unknown model: " + name)
 
 
 
 # ==========================
-# 按配置构建数据集
+# Build dataset from config
 # ==========================
 def build_dataset(config, split="test"):
 
@@ -33,7 +40,7 @@ def build_dataset(config, split="test"):
 
 
 # ==========================
-# 记载模型权重
+# Load model weights
 # ==========================
 def load_weights(model, config):
     path = config["training"]["save_path"]
@@ -48,7 +55,7 @@ def load_weights(model, config):
 
 
 # ==========================
-# 保存三视图合成图
+# Save stacked three-view image
 # ==========================
 def save_triple_view(img, save_path):
     """img: (3,H,W)"""
@@ -58,7 +65,7 @@ def save_triple_view(img, save_path):
 
 
 # ==========================
-# 保存单独 slice
+# Save individual slices
 # ==========================
 def save_each_view(img, out_dir):
     os.makedirs(out_dir, exist_ok=True)
@@ -72,14 +79,14 @@ def save_each_view(img, out_dir):
 
 
 # ==========================
-# 可视化一个样本
+# Visualize one sample
 # ==========================
 def visualize_sample(dataset, idx, model=None, device="cpu"):
 
     img, label = dataset[idx]
     print("true label =", label)
 
-    # 预测
+    # Predict
     if model is not None:
         with torch.no_grad():
             logits = model(img.unsqueeze(0).to(device))
@@ -96,17 +103,17 @@ def visualize_sample(dataset, idx, model=None, device="cpu"):
 # ==========================
 if __name__ == "__main__":
 
-    model_name = "resnet"      # 或 resnet
+    model_name = "resnet"
     cfg_path = os.path.join("configs","training",model_name+".yaml")
 
     config = load_config(cfg_path)
 
-    # 数据
+    # Data
     dataset = build_dataset(config, "test")
 
-    # 模型
+    # Model
     model = build_model(config["model"]["name"])
     model = load_weights(model, config)
 
-    # 可视化
+    # Visualize
     visualize_sample(dataset, idx=0, model=model)

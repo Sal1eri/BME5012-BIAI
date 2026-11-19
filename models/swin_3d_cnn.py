@@ -7,7 +7,7 @@ from functools import reduce, lru_cache
 from operator import mul
 from einops import rearrange
 
-# 来自: yiming0110/3d-cnn-vswinformer/3D-CNN-VswinFormer-main/model.py
+# Adapted from yiming0110/3d-cnn-vswinformer (model.py).
 
 class ChannelAttention3D(nn.Module):
     def __init__(self, in_channels, reduction_ratio=16):
@@ -51,7 +51,6 @@ class CBAMModule3D(nn.Module):
 class res_DW_3DCNN(nn.Module):
     def __init__(self, in_channels=1):
         super().__init__()
-        # 注意：这里将原代码的写死输入1通道改为了参数
         self.conv1 = nn.Conv3d(in_channels=in_channels, out_channels=32, kernel_size=3, stride=1, padding=1)
         self.norm = nn.GroupNorm(8, 32)
         self.dwconv = nn.Conv3d(32, 32, kernel_size=3, padding=1, groups=32)
@@ -61,8 +60,6 @@ class res_DW_3DCNN(nn.Module):
         self.downsample = nn.MaxPool3d(kernel_size=(2, 1, 1), stride=(2, 1, 1))
     def forward(self, x):
         residual = x
-        # 简单的通道适配，如果输入是1通道，残差连接可能需要1x1卷积，这里假设输入经过conv1后会维度变化
-        # 原代码是针对特定输入的，这里为了通用性略作简化，如果报错可能需要调整
         out = self.conv1(x)
         out = self.norm(out)
         out = self.act(out)
@@ -73,7 +70,7 @@ class res_DW_3DCNN(nn.Module):
         out = self.pwconv(out)
         out = self.act(out)
         
-        # 只有当 residual 和 out 形状一致时相加，或者通过投影匹配
+        # Residual add only when shapes match
         if residual.shape == out.shape:
             out += residual
             

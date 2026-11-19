@@ -6,20 +6,15 @@ class VGG16ForAD(nn.Module):
     def __init__(self, num_classes=5):
         """        
         Args:
-            num_classes (int): 分类数量 (默认 5: CN, SMC, EMCI, LMCI, AD)
+            num_classes (int): Number of classes (default: 5)
         """
         super(VGG16ForAD, self).__init__()
         
         self.num_classes = num_classes
         self.vgg16 = models.vgg16(weights=models.VGG16_Weights.DEFAULT)
         
-        # 修改分类头 (Classifier)
-        # VGG16 的 classifier[6] 是最后一个全连接层 (4096 -> 1000)
-        # 将其替换为 (4096 -> num_classes)
-        
+        # Replace the final fully connected layer (4096 -> num_classes)
         in_features = self.vgg16.classifier[6].in_features
-        
-        # 替换最后一层，新层的权重默认是随机初始化的
         self.vgg16.classifier[6] = nn.Linear(in_features, num_classes)
         
     def save_model(self, path):

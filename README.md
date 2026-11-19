@@ -87,7 +87,11 @@ python train.py --model resnet
 python test.py --model resnet --split test
 ```
 
-Full experiment pipeline:
+See `--help` for options; helper scripts are under `scripts/`.
+
+## Pipeline
+
+Build caches, run ML and deep experiments, then collect results and plots:
 
 ```bash
 python scripts/build_cache.py
@@ -96,8 +100,6 @@ bash scripts/run_all_experiments.sh
 python scripts/collect_results.py
 python scripts/plot_losses.py
 ```
-
-See `--help` for options; helper scripts are under `scripts/`.
 
 ## Results
 
